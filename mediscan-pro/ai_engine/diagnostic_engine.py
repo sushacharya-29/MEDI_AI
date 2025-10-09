@@ -17,21 +17,20 @@ from ai_engine.knowledge_graph import MedicalKnowledgeGraph
 from ai_engine.image_classifier import MedicalImageClassifier
 from ai_engine.nlp_processor import ClinicalNLPProcessor
 from ai_engine.llm_interface import GrokLLMInterface
+from ai_engine.rag_engine import HyperRAGEngine
 from core.exceptions import ValidationError
-
 
 class HybridDiagnosticEngine:
     """
-    Production-grade hybrid diagnostic engine.
+    Production-grade hybrid diagnostic engine with HyperRAG integration.
     
     Combines:
-    1. Medical knowledge graph (RAG)
-    2. Clinical NLP (symptom extraction)
-    3. Deep learning (image analysis)
-    4. LLM reasoning (Grok)
-    5. Clinical validation rules
-    
-    This multi-modal approach is what makes it "ground-breaking".
+    1. Medical knowledge graph (rule-based RAG)
+    2. HyperRAG (vector-based retrieval)
+    3. Clinical NLP (symptom extraction)
+    4. Deep learning (image analysis)
+    5. LLM reasoning (Grok)
+    6. Clinical validation rules
     """
     
     def __init__(
@@ -39,14 +38,15 @@ class HybridDiagnosticEngine:
         knowledge_graph: MedicalKnowledgeGraph,
         image_classifier: MedicalImageClassifier,
         nlp_processor: ClinicalNLPProcessor,
-        llm_interface: GrokLLMInterface
+        llm_interface: GrokLLMInterface,
+        rag_engine: HyperRAGEngine
     ):
         self.kg = knowledge_graph
         self.image_clf = image_classifier
         self.nlp = nlp_processor
         self.llm = llm_interface
-        
-        logger.info("Hybrid Diagnostic Engine initialized")
+        self.rag_engine = rag_engine
+        logger.info("Hybrid Diagnostic Engine initialized with HyperRAG")
     
     async def diagnose(
         self,
@@ -55,9 +55,7 @@ class HybridDiagnosticEngine:
         image_data: Optional[bytes] = None
     ) -> Dict[str, Any]:
         """
-        Complete multi-modal diagnostic pipeline.
-        
-        This is what judges will evaluate - make every step count!
+        Complete multi-modal diagnostic pipeline with HyperRAG.
         
         Args:
             symptoms_text: Patient's symptom description
@@ -80,50 +78,63 @@ class HybridDiagnosticEngine:
                 symptom_list = [s['symptom'] for s in extracted_symptoms]
                 logger.info(f"Extracted {len(extracted_symptoms)} symptoms")
             
-            # Step 2: Search knowledge graph for matching diseases
+            # Step 2: Search knowledge graph for rule-based matches
             logger.info("Step 2: Searching knowledge base...")
             kg_matches = self.kg.search_by_symptoms(symptom_list, top_k=10)
             logger.info(f"Found {len(kg_matches)} disease matches")
             
-            # Step 3: Analyze medical image (if provided)
-            logger.info("Step 3: Analyzing medical image...")
+            # Step 3: HyperRAG vector search
+            logger.info("Step 3: HyperRAG vector search...")
+            query = ", ".join(symptom_list)
+            if image_data:
+                image_findings = await self.image_clf.analyze_image(image_data)
+                query += f", Imaging: {image_findings.get('primary_finding', '')}"
+            rag_context = self.rag_engine.retrieve_context(query, top_k=5)
+            logger.info(f"Retrieved {len(rag_context)} HyperRAG matches")
+            
+            # Step 4: Analyze medical image (if provided)
+            logger.info("Step 4: Analyzing medical image...")
             image_findings = None
             if image_data:
                 image_findings = await self.image_clf.analyze_image(image_data)
                 logger.info(f"Image analysis: {image_findings['primary_finding']}")
             
-            # Step 4: Build RAG context for LLM
-            logger.info("Step 4: Building RAG context...")
-            rag_context = self.kg.build_rag_context(
+            # Step 5: Build combined RAG context
+            logger.info("Step 5: Building combined RAG context...")
+            rag_context_str = self.kg.build_rag_context(
                 symptom_list,
                 kg_matches,
                 patient_data,
                 image_findings
             )
+            rag_context_str += "\nHyperRAG Context:\n"
+            for item in rag_context[:3]:
+                rag_context_str += f"- {item['disease']} (ICD-10: {item['icd10']}, Score: {item['score']:.2f})\n{item['content']}\n"
             
-            # Step 5: Get LLM diagnosis with RAG context
-            logger.info("Step 5: Getting LLM diagnosis...")
-            llm_diagnosis = await self.llm.get_medical_diagnosis(rag_context)
+            # Step 6: Get LLM diagnosis with combined context
+            logger.info("Step 6: Getting LLM diagnosis...")
+            llm_diagnosis = await self.llm.get_medical_diagnosis(rag_context_str, image_findings=image_findings)
             logger.info(f"LLM diagnosis: {llm_diagnosis['primary_diagnosis']}")
             
-            # Step 6: Ensemble and validate predictions
-            logger.info("Step 6: Ensemble validation...")
+            # Step 7: Ensemble and validate predictions
+            logger.info("Step 7: Ensemble validation...")
             final_diagnosis = self._ensemble_predictions(
                 kg_matches,
                 llm_diagnosis,
                 image_findings,
-                extracted_symptoms
+                extracted_symptoms,
+                rag_context
             )
             
-            # Step 7: Apply clinical safety rules
-            logger.info("Step 7: Applying clinical rules...")
+            # Step 8: Apply clinical safety rules
+            logger.info("Step 8: Applying clinical rules...")
             final_diagnosis = self._apply_clinical_rules(
                 final_diagnosis,
                 patient_data,
                 extracted_symptoms
             )
             
-            # Step 8: Add metadata and explainability
+            # Step 9: Add metadata and explainability
             processing_time = (datetime.now() - start_time).total_seconds() * 1000
             
             final_diagnosis.update({
@@ -131,13 +142,15 @@ class HybridDiagnosticEngine:
                 'processing_time_ms': round(processing_time, 2),
                 'highlighted_symptoms': extracted_symptoms,
                 'image_findings': image_findings,
+                'hyper_rag_matches': rag_context,
                 'confidence_level': self._get_confidence_label(
                     final_diagnosis['confidence_score']
                 ),
-                'data_sources': self._get_data_sources(kg_matches, image_findings),
+                'data_sources': self._get_data_sources(kg_matches, image_findings, rag_context),
                 'system_version': '4.0.0',
                 'model_versions': {
                     'knowledge_base': f"{len(self.kg.disease_db)} diseases",
+                    'hyper_rag': 'LangChain/FAISS',
                     'image_classifier': 'ResNet50/EfficientNet',
                     'nlp': 'Clinical NLP v1.0',
                     'llm': self.llm.model
@@ -156,33 +169,29 @@ class HybridDiagnosticEngine:
         kg_matches: List[Dict],
         llm_diagnosis: Dict,
         image_findings: Optional[Dict],
-        extracted_symptoms: List[Dict]
+        extracted_symptoms: List[Dict],
+        rag_context: List[Dict]
     ) -> Dict:
         """
-        Ensemble multiple prediction sources for higher accuracy.
-        
-        This is where the "95% accuracy" comes from - combining multiple models.
+        Ensemble predictions from knowledge graph, HyperRAG, LLM, and images.
         """
         diagnosis = llm_diagnosis.copy()
         
-        # Boost confidence if KB and LLM agree
-        if kg_matches:
-            top_kb_disease = kg_matches[0]['name'].lower()
+        # Boost confidence if KG, RAG, and LLM agree
+        if kg_matches and rag_context:
+            top_kg_disease = kg_matches[0]['name'].lower()
+            top_rag_disease = rag_context[0]['disease'].lower()
             llm_disease = diagnosis['primary_diagnosis'].lower()
             
-            # Check for agreement
-            if (top_kb_disease in llm_disease or 
-                llm_disease in top_kb_disease or
-                self._are_similar_diseases(top_kb_disease, llm_disease)):
-                
-                # Strong agreement - boost confidence
+            if (top_kg_disease in llm_disease or llm_disease in top_kg_disease) and \
+               (top_rag_disease in llm_disease or llm_disease in top_rag_disease):
                 original_conf = diagnosis['confidence_score']
-                boost = min(15, 95 - original_conf)
+                boost = min(20, 96 - original_conf)
                 diagnosis['confidence_score'] = original_conf + boost
-                diagnosis['knowledge_base_alignment'] = "Strong agreement with medical knowledge base"
-                logger.info(f"KB-LLM agreement detected, confidence boosted by {boost}")
+                diagnosis['knowledge_base_alignment'] = "Strong agreement with knowledge base and HyperRAG"
+                logger.info(f"KG-RAG-LLM agreement, confidence boosted by {boost}")
             else:
-                diagnosis['knowledge_base_alignment'] = "Partial alignment with knowledge base"
+                diagnosis['knowledge_base_alignment'] = "Partial alignment with knowledge base and HyperRAG"
         
         # Integrate image findings
         if image_findings and image_findings.get('status') == 'success':
@@ -190,13 +199,10 @@ class HybridDiagnosticEngine:
             image_conf = image_findings['confidence']
             
             if image_conf > 0.7:
-                # Check if image finding matches diagnosis
                 if image_finding.lower() in diagnosis['primary_diagnosis'].lower():
-                    # Perfect match - boost confidence
                     diagnosis['confidence_score'] = min(96, diagnosis['confidence_score'] + 8)
                     diagnosis['clinical_notes'] += f"\n\nImaging confirms clinical diagnosis ({image_finding})."
                 else:
-                    # Add as differential if not already present
                     diff_diseases = [d['disease'] for d in diagnosis.get('differential_diagnoses', [])]
                     if image_finding not in diff_diseases:
                         diagnosis.setdefault('differential_diagnoses', []).insert(0, {
@@ -213,7 +219,6 @@ class HybridDiagnosticEngine:
         ]
         
         if len(high_importance_symptoms) >= 3:
-            # Multiple critical symptoms - increase confidence in serious diagnosis
             if diagnosis['risk_level'] in ['HIGH', 'CRITICAL']:
                 diagnosis['confidence_score'] = min(94, diagnosis['confidence_score'] + 5)
         
@@ -221,7 +226,6 @@ class HybridDiagnosticEngine:
     
     def _are_similar_diseases(self, disease1: str, disease2: str) -> bool:
         """Check if two disease names are similar"""
-        # Simple similarity check
         common_words = set(disease1.split()) & set(disease2.split())
         return len(common_words) >= 2
     
@@ -233,8 +237,6 @@ class HybridDiagnosticEngine:
     ) -> Dict:
         """
         Apply clinical decision rules and safety checks.
-        
-        These are evidence-based rules that override AI when necessary.
         """
         # Rule 1: Age-based risk adjustment
         age = patient_data.get('age', 0)
@@ -254,15 +256,10 @@ class HybridDiagnosticEngine:
             
             for critical in critical_symptoms:
                 if critical in symptom_text and symptom_info.get('severity', 0) >= 3:
-                    # Force critical risk level
                     diagnosis['risk_level'] = 'CRITICAL'
-                    
-                    # Add emergency action if not present
                     emergency_action = 'SEEK IMMEDIATE EMERGENCY CARE (CALL 911)'
                     if emergency_action not in diagnosis.get('immediate_actions', []):
                         diagnosis.setdefault('immediate_actions', []).insert(0, emergency_action)
-                    
-                    # Add to red flags
                     flag = f"Critical symptom detected: {critical}"
                     if flag not in diagnosis.get('red_flags', []):
                         diagnosis.setdefault('red_flags', []).append(flag)
@@ -271,8 +268,7 @@ class HybridDiagnosticEngine:
         if diagnosis['confidence_score'] > 85:
             num_differentials = len(diagnosis.get('differential_diagnoses', []))
             if num_differentials < 2:
-                # High confidence but limited differential - be conservative
-                diagnosis['confidence_score'] = min(diagnosis['confidence_score'], 85)
+                diagnosis['confidence_score'] = min(85, diagnosis['confidence_score'])
                 diagnosis['clinical_notes'] += "\n\nConfidence calibrated for medical safety (limited differential analysis)."
         
         # Rule 4: Duration-based severity
@@ -306,21 +302,24 @@ class HybridDiagnosticEngine:
     def _get_data_sources(
         self,
         kg_matches: List[Dict],
-        image_findings: Optional[Dict]
+        image_findings: Optional[Dict],
+        rag_context: List[Dict]
     ) -> List[str]:
         """List all data sources used in diagnosis"""
         sources = [
             "Medical Knowledge Base (RAG)",
+            "HyperRAG (Vector Search)",
             "Clinical NLP Processor"
         ]
         
         if kg_matches:
             sources.append(f"Disease Database ({len(kg_matches)} matches)")
-        
+        if rag_context:
+            sources.append(f"HyperRAG Database ({len(rag_context)} matches)")
         if image_findings and image_findings.get('status') == 'success':
             sources.append(f"Medical Imaging AI ({image_findings['image_type']})")
         
-        sources.append("Grok-2 Medical Reasoning")
+        sources.append("Grok-4 Medical Reasoning")
         sources.append("Clinical Decision Rules")
         
         return sources

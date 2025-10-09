@@ -1,285 +1,128 @@
+# ============================================================================
+# FILE: app.py
+# Main FastAPI Application - The Entry Point
+# ============================================================================
 
 """
-AI MediScan Pro - Main Application Entry Point
-===============================================
-
-This is the main FastAPI application file.
-All features are modular - add new features without rewriting this file.
-
-Project Structure:
-    app.py (THIS FILE) - Main application
-    core/ - Configuration, security, exceptions
-    ai_engine/ - All AI components
-    services/ - Business logic services
-    models/ - Data models
-    utils/ - Utilities
-
-Author: AI MediScan Pro Team
-Version: 4.0.0
+Main application file that ties everything together.
+This is what judges will interact with.
 """
 
-import sys
-from pathlib import Path
-from contextlib import asynccontextmanager
-from datetime import datetime
-import time
-
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, File, UploadFile, HTTPException, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from fastapi.exceptions import RequestValidationError
+from contextlib import asynccontextmanager
+import time
+import create_datasets
+import pandas as pd
 from loguru import logger
-
-# ============================================================================
-# IMPORTS - Core Configuration
-# ============================================================================
+from fastapi import FastAPI
+from pydantic import BaseModel
+from typing import List
+import pandas as pd
+from pathlib import Path
+import create_datasets 
 from core.config import settings
 from core.exceptions import MediScanException
 from utils.logging_config import setup_logging
-
-# ============================================================================
-# IMPORTS - AI Engine Components
-# ============================================================================
+from models.schemas import PatientInput, DiagnosisOutput, HealthCheckResponse
+from ai_engine.rag_engine import HyperRAGEngine
+# Import AI components
 from ai_engine.knowledge_graph import MedicalKnowledgeGraph
 from ai_engine.image_classifier import MedicalImageClassifier
 from ai_engine.nlp_processor import ClinicalNLPProcessor
 from ai_engine.llm_interface import GrokLLMInterface
 from ai_engine.diagnostic_engine import HybridDiagnosticEngine
-
-# ============================================================================
-# IMPORTS - Services
-# ============================================================================
-from services.cache_service import CacheService
-from services.metrics_service import MetricsService
-
-# ============================================================================
-# IMPORTS - API Routes (we'll add these as separate modules)
-# ============================================================================
-# When you add new features, create new route files and import them here
-# Example: from api.v2 import diagnosis, analytics, patients
+from core.security import security
+from pathlib import Path
+# Import services
+from services.cache_services import CacheService
+from services.metric_services import MetricsService
 
 
 # ============================================================================
-# APPLICATION STATE MANAGEMENT
+# Application Lifecycle Management
 # ============================================================================
+from fastapi import Header, HTTPException, Depends
 
-class ApplicationState:
+async def verify_api_key(x_api_key: str = Header(...)):
     """
-    Centralized application state management.
-    
-    This makes it easy to add new components without cluttering app.state
+    Validate incoming API Key.
     """
-    
-    def __init__(self):
-        # AI Components
-        self.knowledge_graph: MedicalKnowledgeGraph = None
-        self.image_classifier: MedicalImageClassifier = None
-        self.nlp_processor: ClinicalNLPProcessor = None
-        self.llm_interface: GrokLLMInterface = None
-        self.diagnostic_engine: HybridDiagnosticEngine = None
-        
-        # Services
-        self.cache_service: CacheService = None
-        self.metrics_service: MetricsService = None
-        
-        # Metadata
-        self.startup_time: datetime = None
-        self.version: str = "4.0.0"
-        self.ready: bool = False
-    
-    async def initialize(self):
-        """Initialize all components"""
-        logger.info("="*80)
-        logger.info("AI MediScan Pro - Initializing System")
-        logger.info("="*80)
-        
-        self.startup_time = datetime.now()
-        
-        # Setup logging
-        setup_logging()
-        
-        try:
-            # Initialize AI components
-            logger.info("Loading medical knowledge base...")
-            dataset_paths = self._get_dataset_paths()
-            self.knowledge_graph = MedicalKnowledgeGraph(dataset_paths)
-            
-            logger.info("Loading image classification models...")
-            self.image_classifier = MedicalImageClassifier()
-            
-            logger.info("Initializing clinical NLP processor...")
-            self.nlp_processor = ClinicalNLPProcessor()
-            
-            logger.info("Connecting to LLM interface...")
-            self.llm_interface = GrokLLMInterface()
-            
-            logger.info("Building diagnostic engine...")
-            self.diagnostic_engine = HybridDiagnosticEngine(
-                self.knowledge_graph,
-                self.image_classifier,
-                self.nlp_processor,
-                self.llm_interface
-            )
-            
-            # Initialize services
-            logger.info("Starting cache service...")
-            self.cache_service = CacheService()
-            
-            logger.info("Starting metrics service...")
-            self.metrics_service = MetricsService()
-            
-            # Log system statistics
-            stats = self.knowledge_graph.get_statistics()
-            logger.info("="*80)
-            logger.info("System Statistics:")
-            logger.info(f"  Knowledge Base: {stats['total_diseases']} diseases")
-            logger.info(f"  Symptoms Indexed: {stats['total_symptoms']}")
-            logger.info(f"  Critical Diseases: {stats['critical_diseases']}")
-            logger.info(f"  Device: {settings.torch_device}")
-            logger.info(f"  Cache: {'Enabled' if self.cache_service.enabled else 'Disabled'}")
-            logger.info(f"  Metrics: {'Enabled' if self.metrics_service.enabled else 'Disabled'}")
-            logger.info("="*80)
-            
-            self.ready = True
-            logger.info("✓ AI MediScan Pro - Ready for Medical Diagnoses")
-            logger.info("="*80)
-            
-        except Exception as e:
-            logger.error(f"Failed to initialize system: {str(e)}", exc_info=True)
-            self.ready = False
-            raise
-    
-    async def shutdown(self):
-        """Cleanup on shutdown"""
-        logger.info("Shutting down AI MediScan Pro...")
-        
-        try:
-            if self.llm_interface:
-                await self.llm_interface.close()
-            
-            if self.cache_service:
-                await self.cache_service.close()
-            
-            logger.info("✓ Shutdown complete")
-        except Exception as e:
-            logger.error(f"Error during shutdown: {str(e)}")
-    
-    def _get_dataset_paths(self):
-        """Get all available dataset paths"""
-        dataset_dir = settings.datasets_dir
-        paths = []
-        
-        # Look for common dataset files
-        for pattern in ['*.csv', '*.json', '*.xlsx']:
-            paths.extend([str(p) for p in dataset_dir.glob(pattern)])
-        
-        if not paths:
-            logger.warning(f"No datasets found in {dataset_dir}")
-        
-        return paths
-    
-    def get_health_status(self):
-        """Get current system health status"""
-        if not self.ready:
-            return {
-                "status": "initializing",
-                "ready": False
-            }
-        
-        kb_stats = self.knowledge_graph.get_statistics()
-        
-        return {
-            "status": "healthy",
-            "ready": True,
-            "version": self.version,
-            "uptime_seconds": (datetime.now() - self.startup_time).total_seconds(),
-            "components": {
-                "knowledge_base": {
-                    "diseases": kb_stats['total_diseases'],
-                    "symptoms": kb_stats['total_symptoms'],
-                    "status": "operational"
-                },
-                "image_classifier": {
-                    "models": len(self.image_classifier.models),
-                    "device": str(settings.torch_device),
-                    "status": "operational"
-                },
-                "nlp_processor": {
-                    "patterns": len(self.nlp_processor.symptom_patterns),
-                    "status": "operational"
-                },
-                "llm_interface": {
-                    "model": settings.grok_model,
-                    "status": "operational"
-                },
-                "cache": {
-                    "enabled": self.cache_service.enabled,
-                    "status": "operational" if self.cache_service.enabled else "disabled"
-                },
-                "metrics": {
-                    "enabled": self.metrics_service.enabled,
-                    "status": "operational" if self.metrics_service.enabled else "disabled"
-                }
-            }
-        }
-
-
-# ============================================================================
-# APPLICATION LIFECYCLE
-# ============================================================================
-
-# Global application state
-app_state = ApplicationState()
-
-
+    hashed_key = security.hash_api_key(x_api_key)
+    # TODO: Compare hashed_key against stored hashed API keys
+    if hashed_key != settings.api_key_hash:  # assume stored in settings
+        raise HTTPException(status_code=403, detail="Invalid API key")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
     Application lifecycle manager.
-    Handles startup and shutdown.
+    Handles startup and shutdown operations.
     """
     # Startup
-    await app_state.initialize()
+    logger.info("="*80)
+    logger.info("AI MediScan Pro - Starting Up")
+    logger.info("="*80)
     
-    # Make state available to app
-    app.state.mediscan = app_state
+    setup_logging()
+    
+    # Initialize AI components
+    logger.info("Initializing AI components...")
+    
+    # Dataset paths
+    dataset_paths = [
+        str(settings.datasets_dir / "diseases.csv"),
+        str(settings.datasets_dir / "diseases.json")
+    ]
+    
+    app.state.knowledge_graph = MedicalKnowledgeGraph(dataset_paths)
+    app.state.image_classifier = MedicalImageClassifier()
+    app.state.nlp_processor = ClinicalNLPProcessor()
+    app.state.llm_interface = GrokLLMInterface()
+    app.state.rag_engine = HyperRAGEngine(str(settings.datasets_dir / "diseases.csv"))  # NEW: Added HyperRAGEngine
+    app.state.diagnostic_engine = HybridDiagnosticEngine(
+        app.state.knowledge_graph,
+        app.state.image_classifier,
+        app.state.nlp_processor,
+        app.state.llm_interface,
+        app.state.rag_engine  # NEW: Passed rag_engine
+    )
+    
+    # Initialize services
+    app.state.cache_service = CacheService()
+    app.state.metrics_service = MetricsService()
+    
+    # Log system stats
+    stats = app.state.knowledge_graph.get_statistics()
+    logger.info(f"Knowledge Base: {stats['total_diseases']} diseases, {stats['total_symptoms']} symptoms")
+    logger.info(f"Critical Diseases: {stats['critical_diseases']}")
+    logger.info(f"Device: {settings.torch_device}")
+    
+    logger.info("="*80)
+    logger.info("AI MediScan Pro - Ready for Diagnoses")
+    logger.info("="*80)
     
     yield
     
     # Shutdown
-    await app_state.shutdown()
-
-
+    logger.info("Shutting down AI MediScan Pro...")
+    await app.state.llm_interface.close()
+    await app.state.cache_service.close()
+    logger.info("Shutdown complete")
 # ============================================================================
-# CREATE FASTAPI APPLICATION
+# FastAPI Application
 # ============================================================================
 
 app = FastAPI(
     title="AI MediScan Pro",
-    description=(
-        "Production-Grade Multi-Modal Medical AI System for Early Disease Detection\n\n"
-        "Features:\n"
-        "- Medical Knowledge Graph with 50+ diseases\n"
-        "- RAG-enhanced diagnosis (prevents hallucination)\n"
-        "- Multi-modal analysis (text + medical images)\n"
-        "- Deep learning image classifiers\n"
-        "- Clinical NLP processing\n"
-        "- Real-time risk assessment\n"
-        "- ICD-10 validated diagnoses"
-    ),
+    description="Production-Grade Multi-Modal Medical AI for Early Disease Detection",
     version="4.0.0",
     lifespan=lifespan,
     docs_url="/api/docs",
-    redoc_url="/api/redoc",
-    openapi_url="/api/openapi.json"
+    redoc_url="/api/redoc"
 )
 
-
-# ============================================================================
-# MIDDLEWARE CONFIGURATION
-# ============================================================================
-
-# CORS - Allow all origins for hackathon demo
+# CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -289,58 +132,20 @@ app.add_middleware(
 )
 
 
-# Request timing middleware
-@app.middleware("http")
-async def add_process_time_header(request: Request, call_next):
-    """Add processing time to response headers"""
-    start_time = time.time()
-    response = await call_next(request)
-    process_time = time.time() - start_time
-    response.headers["X-Process-Time"] = str(process_time)
-    return response
-
-
-# Request logging middleware
-@app.middleware("http")
-async def log_requests(request: Request, call_next):
-    """Log all requests"""
-    logger.info(f"{request.method} {request.url.path}")
-    response = await call_next(request)
-    logger.info(f"Status: {response.status_code}")
-    return response
-
-
 # ============================================================================
-# EXCEPTION HANDLERS
+# Exception Handlers
 # ============================================================================
 
 @app.exception_handler(MediScanException)
 async def mediscan_exception_handler(request: Request, exc: MediScanException):
     """Handle custom MediScan exceptions"""
     logger.error(f"MediScan error: {exc.message}")
-    
     return JSONResponse(
         status_code=exc.status_code,
         content={
             "error": exc.message,
             "details": exc.details,
-            "timestamp": datetime.now().isoformat(),
-            "path": str(request.url.path)
-        }
-    )
-
-
-@app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    """Handle validation errors"""
-    logger.error(f"Validation error: {str(exc)}")
-    
-    return JSONResponse(
-        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        content={
-            "error": "Validation error",
-            "details": exc.errors(),
-            "timestamp": datetime.now().isoformat()
+            "timestamp": time.time()
         }
     )
 
@@ -349,97 +154,311 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 async def global_exception_handler(request: Request, exc: Exception):
     """Handle unexpected exceptions"""
     logger.error(f"Unexpected error: {str(exc)}", exc_info=True)
-    
-    # Record error metric
-    if app_state.ready and app_state.metrics_service:
-        app_state.metrics_service.record_error(type(exc).__name__)
-    
     return JSONResponse(
-        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        status_code=500,
         content={
             "error": "Internal server error",
             "message": "An unexpected error occurred. Please try again.",
-            "timestamp": datetime.now().isoformat()
+            "timestamp": time.time()
         }
     )
 
 
+# Ensure datasets exist
+DATA_DIR = Path("data/datasets")
+if not (DATA_DIR / "diseases.csv").exists():
+    print("Dataset not found. Creating dataset...")
+    create_datasets.create_groundbreaking_medical_dataset()
+
+# Load datasets
+disease_df = pd.read_csv(DATA_DIR / "diseases.csv")
+symptom_df = pd.read_csv(DATA_DIR / "symptom_disease_mapping.csv")
+comorbidity_df = pd.read_csv(DATA_DIR / "disease_comorbidity_mapping.csv")
+
 # ============================================================================
-# API ROUTES - Core Endpoints
+# API Endpoints
 # ============================================================================
 
 @app.get("/", tags=["System"])
 async def root():
-    """
-    Root endpoint - API information
-    
-    Returns basic information about the API and available endpoints.
-    """
+    """Root endpoint - API information"""
     return {
         "service": "AI MediScan Pro",
-        "version": app_state.version,
-        "status": "operational" if app_state.ready else "initializing",
+        "version": "4.0.0",
+        "status": "operational",
         "description": "Production-grade multi-modal medical AI system",
-        "documentation": {
-            "interactive": "/api/docs",
-            "redoc": "/api/redoc",
-            "openapi": "/api/openapi.json"
-        },
-        "endpoints": {
-            "health": "/health",
-            "diagnose": f"{settings.api_v2_prefix}/diagnose",
-            "analyze_image": f"{settings.api_v2_prefix}/analyze-image",
-            "extract_symptoms": f"{settings.api_v2_prefix}/extract-symptoms",
-            "search_diseases": f"{settings.api_v2_prefix}/search-diseases",
-            "disease_info": f"{settings.api_v2_prefix}/disease/{{disease_name}}",
-            "stats": f"{settings.api_v2_prefix}/stats"
-        },
-        "features": [
+        "capabilities": [
             "Multi-modal diagnosis (text + imaging)",
             "RAG-enhanced knowledge graph",
             "Clinical NLP processing",
             "Deep learning image analysis",
             "LLM medical reasoning",
             "Real-time risk prediction",
-            "ICD-10 validated diagnoses"
-        ]
+            "Anti-hallucination design"
+        ],
+        "endpoints": {
+            "diagnose": f"{settings.api_v2_prefix}/diagnose",
+            "analyze_image": f"{settings.api_v2_prefix}/analyze-image",
+            "search_diseases": f"{settings.api_v2_prefix}/search-diseases",
+            "health": "/health"
+        }
     }
 
 
-@app.get("/health", tags=["System"])
-async def health_check():
-    """
-    Health check endpoint
+@app.get("/health", response_model=HealthCheckResponse, tags=["System"])
+async def health_check(request: Request):
+    """Health check endpoint for monitoring"""
+    kg = request.app.state.knowledge_graph
+    stats = kg.get_statistics()
     
-    Returns detailed system health status for monitoring.
-    """
-    return app_state.get_health_status()
+    return HealthCheckResponse(
+        status="healthy",
+        version="4.0.0",
+        timestamp=time.time(),
+        system_health={
+            "knowledge_base": {
+                "diseases": stats['total_diseases'],
+                "symptoms": stats['total_symptoms'],
+                "critical_diseases": stats['critical_diseases']
+            },
+            "models": {
+                "image_classifiers": len(request.app.state.image_classifier.models),
+                "device": str(settings.torch_device)
+            },
+            "cache": request.app.state.cache_service.enabled,
+            "metrics": request.app.state.metrics_service.enabled
+        }
+    )
 
 
-@app.get(f"{settings.api_v2_prefix}/stats", tags=["System"])
-async def system_statistics():
+@app.post (
+    f"{settings.api_v2_prefix}/diagnose",
+    response_model=DiagnosisOutput,
+    tags=["Diagnosis"],
+    dependencies=[Depends(verify_api_key)]
+)
+async def diagnose_patient(
+    request: Request,
+    patient_data: PatientInput,
+    image: UploadFile = File(None)
+):
     """
-    Get comprehensive system statistics
+    Comprehensive multi-modal diagnosis endpoint.
     
-    Returns detailed information about knowledge base, models, and configuration.
+    This is the MAIN endpoint judges will test.
+    
+    Features:
+    - Text-based symptom analysis with NLP
+    - Medical image analysis (X-ray, CT, skin)
+    - Knowledge graph retrieval (RAG)
+    - LLM reasoning with clinical context
+    - Ensemble predictions
+    - Clinical validation rules
+    - Caching for performance
     """
-    if not app_state.ready:
-        return {"error": "System not ready"}
+    start_time = time.time()
     
-    kb_stats = app_state.knowledge_graph.get_statistics()
-    model_info = app_state.image_classifier.get_model_info()
+    try:
+        # Check cache first (for performance demo)
+        cached = await request.app.state.cache_service.get_diagnosis(
+            patient_data.symptoms or "",
+            patient_data.dict()
+        )
+        
+        if cached:
+            logger.info("Returning cached diagnosis")
+            cached['from_cache'] = True
+            return cached
+        
+        # Process image if provided
+        image_data = None
+        if image:
+            image_data = await image.read()
+            logger.info(f"Received image: {image.filename} ({len(image_data)} bytes)")
+            
+            # Record image analysis metric
+            request.app.state.metrics_service.record_image_analysis('uploaded')
+        
+        # Run diagnosis pipeline
+        diagnosis = await request.app.state.diagnostic_engine.diagnose(
+            symptoms_text=patient_data.symptoms,
+            patient_data=patient_data.dict(),
+            image_data=image_data
+        )
+        
+        # Cache result
+        if patient_data.symptoms:
+            await request.app.state.cache_service.cache_diagnosis(
+                patient_data.symptoms,
+                patient_data.dict(),
+                diagnosis
+            )
+        
+        # Record metrics
+        duration = time.time() - start_time
+        request.app.state.metrics_service.record_diagnosis(diagnosis, duration)
+        
+        logger.info(
+            f"Diagnosis complete: {diagnosis['primary_diagnosis']} "
+            f"(confidence: {diagnosis['confidence_score']}%, "
+            f"risk: {diagnosis['risk_level']}, "
+            f"time: {duration:.2f}s)"
+        )
+        
+        diagnosis['from_cache'] = False
+        return diagnosis
+        
+    except Exception as e:
+        logger.error(f"Diagnosis error: {str(e)}", exc_info=True)
+        request.app.state.metrics_service.record_error(type(e).__name__)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Diagnosis failed: {str(e)}"
+        )
+
+
+@app.post(
+    f"{settings.api_v2_prefix}/analyze-image",
+    tags=["Diagnosis"]
+)
+async def analyze_medical_image(
+    request: Request,
+    image: UploadFile = File(...),
+    image_type: str = "auto"
+):
+    """
+    Standalone medical image analysis.
+    
+    Supports: X-rays, CT scans, MRIs, skin lesions
+    """
+    try:
+        image_data = await image.read()
+        
+        findings = await request.app.state.image_classifier.analyze_image(
+            image_data,
+            image_type
+        )
+        
+        request.app.state.metrics_service.record_image_analysis(findings['image_type'])
+        
+        return {
+            "status": "success",
+            "findings": findings,
+            "filename": image.filename,
+            "timestamp": time.time()
+        }
+        
+    except Exception as e:
+        logger.error(f"Image analysis error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post(
+    f"{settings.api_v2_prefix}/extract-symptoms",
+    tags=["NLP"]
+)
+async def extract_clinical_symptoms(
+    request: Request,
+    text: str
+):
+    """Extract and analyze symptoms from clinical text using NLP"""
+    try:
+        symptoms = request.app.state.nlp_processor.extract_symptoms(text)
+        analysis = request.app.state.nlp_processor.analyze_clinical_significance(symptoms)
+        
+        return {
+            "status": "success",
+            "symptoms": symptoms,
+            "analysis": analysis
+        }
+        
+    except Exception as e:
+        logger.error(f"Symptom extraction error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get(
+    f"{settings.api_v2_prefix}/search-diseases",
+    tags=["Knowledge Base"]
+)
+async def search_diseases_by_symptoms(
+    request: Request,
+    symptoms: str,
+    top_k: int = 10
+):
+    """
+    Search disease knowledge base by symptoms.
+    
+    Returns ranked diseases with ICD-10 codes.
+    """
+    try:
+        symptom_list = [s.strip() for s in symptoms.split(',')]
+        matches = request.app.state.knowledge_graph.search_by_symptoms(
+            symptom_list,
+            top_k
+        )
+        
+        return {
+            "status": "success",
+            "query": symptom_list,
+            "matches": matches,
+            "total_diseases_searched": len(request.app.state.knowledge_graph.disease_db)
+        }
+        
+    except Exception as e:
+        logger.error(f"Disease search error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get(
+    f"{settings.api_v2_prefix}/disease/{disease_name}",
+    tags=["Knowledge Base"]
+)
+async def get_disease_information(
+    request: Request,
+    disease_name: str
+):
+    """Get detailed information about a specific disease"""
+    try:
+        disease_info = request.app.state.knowledge_graph.get_disease_by_name(disease_name)
+        
+        if not disease_info:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Disease '{disease_name}' not found in knowledge base"
+            )
+        
+        return {
+            "status": "success",
+            "disease": disease_info
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Disease info error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get(
+    f"{settings.api_v2_prefix}/stats",
+    tags=["System"]
+)
+async def get_system_statistics(request: Request):
+    """Get comprehensive system statistics"""
+    kg_stats = request.app.state.knowledge_graph.get_statistics()
+    model_info = request.app.state.image_classifier.get_model_info()
     
     return {
-        "knowledge_base": kb_stats,
+        "knowledge_base": kg_stats,
         "models": model_info,
         "configuration": {
             "device": str(settings.torch_device),
-            "cache_enabled": app_state.cache_service.enabled,
-            "metrics_enabled": app_state.metrics_service.enabled,
-            "api_version": app_state.version,
-            "grok_model": settings.grok_model
+            "cache_enabled": request.app.state.cache_service.enabled,
+            "metrics_enabled": request.app.state.metrics_service.enabled,
+            "api_version": "4.0.0"
         },
-        "capabilities": [
+        "features": [
             "Multi-modal fusion (text + images)",
             "RAG-enhanced diagnosis",
             "Clinical NLP processing",
@@ -452,57 +471,7 @@ async def system_statistics():
 
 
 # ============================================================================
-# IMPORT AND REGISTER ROUTE MODULES
-# ============================================================================
-
-# This is where you'll add new feature routes
-# Create separate files in api/v2/ directory for different features
-
-# Example structure:
-# from api.v2.diagnosis import router as diagnosis_router
-# from api.v2.analytics import router as analytics_router
-# from api.v2.patients import router as patients_router
-# 
-# app.include_router(diagnosis_router, prefix=settings.api_v2_prefix, tags=["Diagnosis"])
-# app.include_router(analytics_router, prefix=settings.api_v2_prefix, tags=["Analytics"])
-# app.include_router(patients_router, prefix=settings.api_v2_prefix, tags=["Patients"])
-
-# For now, we'll keep the main diagnosis routes here
-# You can move them to separate files later
-
-from api.v2 import diagnosis_routes, knowledge_routes
-
-app.include_router(
-    diagnosis_routes.router,
-    prefix=settings.api_v2_prefix,
-    tags=["Diagnosis"]
-)
-
-app.include_router(
-    knowledge_routes.router,
-    prefix=settings.api_v2_prefix,
-    tags=["Knowledge Base"]
-)
-
-
-# ============================================================================
-# STARTUP EVENT (Additional initialization if needed)
-# ============================================================================
-
-@app.on_event("startup")
-async def startup_event():
-    """Additional startup tasks"""
-    logger.info("FastAPI application started")
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Additional shutdown tasks"""
-    logger.info("FastAPI application stopped")
-
-
-# ============================================================================
-# RUN APPLICATION
+# Run Application
 # ============================================================================
 
 if __name__ == "__main__":
@@ -513,6 +482,5 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=8000,
         reload=settings.debug,
-        log_level=settings.log_level.lower(),
-        access_log=True
+        log_level=settings.log_level.lower()
     )

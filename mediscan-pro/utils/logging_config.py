@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from typing import Optional, Dict
 import hashlib
 import secrets
-
+import base64
 from core.config import settings
 from core.exceptions import AuthenticationError
 
