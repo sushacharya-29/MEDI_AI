@@ -411,7 +411,7 @@ async def search_diseases_by_symptoms(
 
 
 @app.get(
-    f"{settings.api_v2_prefix}/disease/{disease_name}",
+    f"{settings.api_v2_prefix}/disease/{{disease_name}}",
     tags=["Knowledge Base"]
 )
 async def get_disease_information(
