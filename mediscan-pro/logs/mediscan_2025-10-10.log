@@ -292,3 +292,29 @@
 2025-10-10 21:59:13 | INFO     | app:lifespan:103 | ================================================================================
 2025-10-10 21:59:13 | INFO     | app:lifespan:104 | AI MediScan Pro - Ready for Diagnoses
 2025-10-10 21:59:13 | INFO     | app:lifespan:105 | ================================================================================
+2025-10-10 23:34:35 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 23:34:35 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 23:34:35 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 23:34:35 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 23:34:35 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (402 records)
+2025-10-10 23:34:35 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 23:34:35 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 402 total records
+2025-10-10 23:34:35 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 221 diseases with 411 unique symptoms
+2025-10-10 23:34:35 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 221 diseases, 411 symptoms
+2025-10-10 23:34:36 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 23:34:36 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 23:34:36 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 23:34:37 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 23:34:49 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 23:34:55 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:44 | Dataset indexed in FAISS vector store
+2025-10-10 23:34:55 | INFO     | ai_engine.diagnostic_engine:__init__:49 | Hybrid Diagnostic Engine initialized with HyperRAG
+2025-10-10 23:34:55 | INFO     | services.cache_services:_initialize:45 | Cache service initialized (Redis)
+2025-10-10 23:34:55 | INFO     | services.metric_services:__init__:59 | Metrics service enabled
+2025-10-10 23:34:55 | INFO     | app:lifespan:99 | Knowledge Base: 221 diseases, 411 symptoms
+2025-10-10 23:34:55 | INFO     | app:lifespan:100 | Critical Diseases: 85
+2025-10-10 23:34:55 | INFO     | app:lifespan:101 | Device: cpu
+2025-10-10 23:34:55 | INFO     | app:lifespan:103 | ================================================================================
+2025-10-10 23:34:55 | INFO     | app:lifespan:104 | AI MediScan Pro - Ready for Diagnoses
+2025-10-10 23:34:55 | INFO     | app:lifespan:105 | ================================================================================
+2025-10-10 23:35:16 | INFO     | app:lifespan:110 | Shutting down AI MediScan Pro...
+2025-10-10 23:35:16 | INFO     | app:lifespan:113 | Shutdown complete
