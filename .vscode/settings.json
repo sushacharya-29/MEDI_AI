@@ -1,0 +1,7 @@
+
+    {
+    "python.analysis.extraPaths": [
+        "C:/WINNERS/mediscan-pro/venv/Lib/site-packages"
+    ],
+    "python.analysis.useLibraryCodeForTypes": true
+}

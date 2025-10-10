@@ -6,6 +6,7 @@
 """
 Main application file that ties everything together.
 This is what judges will interact with.
+
 """
 
 from fastapi import FastAPI, File, UploadFile, HTTPException, Depends, Request
@@ -44,6 +45,7 @@ from services.metric_services import MetricsService
 # Application Lifecycle Management
 # ============================================================================
 from fastapi import Header, HTTPException, Depends
+import os
 
 async def verify_api_key(x_api_key: str = Header(...)):
     """
@@ -165,13 +167,19 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 
 # Ensure datasets exist
-DATA_DIR = Path("data/datasets")
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / "data" / "datasets"
+
+# Debugging output
+print("Current working directory:", os.getcwd())
+print("Looking for file at:", os.path.abspath(DATA_DIR / "symptom_disease_mapping.csv"))
+print("Exists:", os.path.exists(DATA_DIR / "symptom_disease_mapping.csv"))
 if not (DATA_DIR / "diseases.csv").exists():
     print("Dataset not found. Creating dataset...")
     create_datasets.create_groundbreaking_medical_dataset()
 
 # Load datasets
-disease_df = pd.read_csv(DATA_DIR / "diseases.csv")
+disease_df = pd.read_csv(DATA_DIR / "diseases.csv", sep=",", quotechar='"')
 symptom_df = pd.read_csv(DATA_DIR / "symptom_disease_mapping.csv")
 comorbidity_df = pd.read_csv(DATA_DIR / "disease_comorbidity_mapping.csv")
 
@@ -484,3 +492,4 @@ if __name__ == "__main__":
         reload=settings.debug,
         log_level=settings.log_level.lower()
     )
+ 

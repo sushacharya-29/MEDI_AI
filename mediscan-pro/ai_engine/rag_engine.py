@@ -1,10 +1,11 @@
-from langchain.vectorstores import FAISS
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.docstore.document import Document
 import pandas as pd
 from pathlib import Path
 from typing import List, Dict, Any
 from loguru import logger
+
 
 class HyperRAGEngine:
     """Lightweight RAG engine for medical context retrieval using LangChain and FAISS."""

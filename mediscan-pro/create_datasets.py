@@ -438,39 +438,62 @@ def create_groundbreaking_medical_dataset():
             'CT: pancreatic inflammation'
         ]
     }
+import random
+import random
 
-    # Expand to 200 diseases with realistic variants
-    def expand_diseases(base_data, target_size=200):
-        expanded = {k: [] for k in base_data}
-        disease_subtypes = {
-            'Pneumonia': ['Viral Pneumonia', 'Bacterial Pneumonia', 'Aspiration Pneumonia'],
-            'Type 2 Diabetes': ['Type 2 Diabetes with Neuropathy', 'Type 2 Diabetes with Retinopathy'],
-            'Malaria': ['Plasmodium Falciparum Malaria', 'Plasmodium Vivax Malaria']
-            # Add more subtypes for other diseases in full implementation
-        }
-        for i in range(target_size):
-            idx = i % len(base_data['Disease'])
-            base_disease = base_data['Disease'][idx]
-            subtype = disease_subtypes.get(base_disease, [base_disease])[min(i // len(base_data['Disease']), len(disease_subtypes.get(base_disease, [])) - 1)]
-            for key in base_data:
+import random
+
+def expand_diseases(base_data, target_size=200):
+    expanded = {k: [] for k in base_data}
+    
+    disease_subtypes = {
+        'Pneumonia': ['Viral Pneumonia', 'Bacterial Pneumonia', 'Aspiration Pneumonia'],
+        'Type 2 Diabetes': ['Type 2 Diabetes with Neuropathy', 'Type 2 Diabetes with Retinopathy'],
+        'Malaria': ['Plasmodium Falciparum Malaria', 'Plasmodium Vivax Malaria']
+    }
+    
+    for i in range(target_size):
+        # Safe selection of disease
+        disease_idx = i % len(base_data['Disease'])
+        base_disease = base_data['Disease'][disease_idx]
+        subtypes = disease_subtypes.get(base_disease, [base_disease])
+        subtype_idx = min(i // len(base_data['Disease']), len(subtypes) - 1)
+        subtype = subtypes[subtype_idx]
+        
+        for key in base_data:
+            column_list = base_data[key]
+            
+            if not column_list:  # Handle empty columns
                 if key == 'Disease':
-                    expanded[key].append(f"{subtype}{'' if i < len(base_data[key]) else f'_v{i//len(base_data[key])}'}")
-                elif key == 'ICD10':
-                    expanded[key].append(f"{base_data[key][idx]}{'' if i < len(base_data[key]) else f'.{i//len(base_data[key])}'}")
-                elif key in ['Symptoms', 'Tests', 'RiskFactors', 'Treatments', 'Comorbidities', 'MockImageFindings']:
-                    items = base_data[key][idx].split(',')
-                    # Add 1-2 related items for realism
-                    extra_items = random.sample(items, min(2, len(items))) if random.random() > 0.5 else []
-                    expanded[key].append(','.join(items + extra_items))
-                elif key == 'Prevalence':
-                    expanded[key].append(base_data[key][idx] * (0.8 + random.random() * 0.4))
-                elif key == 'Severity':
-                    expanded[key].append(base_data[key][idx] if random.random() > 0.3 else random.choice(['critical', 'high', 'medium']))
-                elif key == 'SymptomOnset':
-                    expanded[key].append(base_data[key][idx] if random.random() > 0.5 else random.choice(['acute: hours', 'acute: days', 'chronic: weeks', 'chronic: months']))
+                    expanded[key].append(subtype)
                 elif key == 'DemographicRisks':
-                    expanded[key].append(f"{base_data[key][idx]},Region{i%5}:1.{random.randint(1,3)}x")
-        return expanded
+                    expanded[key].append(f"Region{i%5}:1.{random.randint(1,3)}x")
+                else:
+                    expanded[key].append("N/A")
+                continue
+            
+            idx = i % len(column_list)
+            
+            if key == 'Disease':
+                expanded[key].append(f"{subtype}{'' if i < len(column_list) else f'_v{i//len(column_list)}'}")
+            elif key == 'ICD10':
+                expanded[key].append(f"{column_list[idx]}{'' if i < len(column_list) else f'.{i//len(column_list)}'}")
+            elif key in ['Symptoms', 'Tests', 'RiskFactors', 'Treatments', 'Comorbidities', 'MockImageFindings']:
+                items = column_list[idx].split(',') if column_list[idx] else []
+                extra_items = random.sample(items, min(2, len(items))) if items and random.random() > 0.5 else []
+                expanded[key].append(','.join(items + extra_items) if items else "N/A")
+            elif key == 'Prevalence':
+                expanded[key].append(column_list[idx] * (0.8 + random.random() * 0.4))
+            elif key == 'Severity':
+                expanded[key].append(column_list[idx] if random.random() > 0.3 else random.choice(['critical', 'high', 'medium']))
+            elif key == 'SymptomOnset':
+                expanded[key].append(column_list[idx] if random.random() > 0.5 else random.choice(['acute: hours', 'acute: days', 'chronic: weeks', 'chronic: months']))
+            elif key == 'DemographicRisks':
+                expanded[key].append(f"{column_list[idx]},Region{i%5}:1.{random.randint(1,3)}x")
+                
+    return expanded
+
+
 
     # Expand to 200 diseases
     diseases_data = expand_diseases(diseases_data, 200)

@@ -1,0 +1,294 @@
+2025-10-10 20:05:23 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 20:05:23 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 20:05:23 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 20:05:23 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 20:05:23 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (59 records)
+2025-10-10 20:05:23 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 20:05:23 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 59 total records
+2025-10-10 20:05:23 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 44 diseases with 183 unique symptoms
+2025-10-10 20:05:23 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 44 diseases, 183 symptoms
+2025-10-10 20:09:43 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 20:09:43 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 20:09:43 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 20:09:43 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 20:09:43 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (59 records)
+2025-10-10 20:09:43 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 20:09:43 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 59 total records
+2025-10-10 20:09:43 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 44 diseases with 183 unique symptoms
+2025-10-10 20:09:43 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 44 diseases, 183 symptoms
+2025-10-10 20:13:03 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 20:13:03 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 20:13:03 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 20:13:04 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 20:16:19 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 20:16:55 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 20:16:55 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 20:16:55 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 20:16:55 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 20:16:55 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (59 records)
+2025-10-10 20:16:55 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 20:16:55 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 59 total records
+2025-10-10 20:16:55 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 44 diseases with 183 unique symptoms
+2025-10-10 20:16:55 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 44 diseases, 183 symptoms
+2025-10-10 20:16:56 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 20:16:56 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 20:16:56 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 20:16:57 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 20:17:12 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 20:20:08 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 20:20:08 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 20:20:08 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 20:20:08 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 20:20:08 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (59 records)
+2025-10-10 20:20:08 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 20:20:08 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 59 total records
+2025-10-10 20:20:08 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 44 diseases with 183 unique symptoms
+2025-10-10 20:20:08 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 44 diseases, 183 symptoms
+2025-10-10 20:20:09 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 20:20:09 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 20:20:09 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 20:20:10 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 20:20:21 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 20:20:48 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 20:20:48 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 20:20:48 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 20:20:48 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 20:20:48 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (59 records)
+2025-10-10 20:20:48 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 20:20:48 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 59 total records
+2025-10-10 20:20:48 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 44 diseases with 183 unique symptoms
+2025-10-10 20:20:48 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 44 diseases, 183 symptoms
+2025-10-10 20:20:49 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 20:20:49 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 20:20:49 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 20:20:50 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 20:21:03 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 20:21:34 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 20:21:34 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 20:21:34 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 20:21:34 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 20:21:34 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (59 records)
+2025-10-10 20:21:34 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 20:21:34 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 59 total records
+2025-10-10 20:21:34 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 44 diseases with 183 unique symptoms
+2025-10-10 20:21:34 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 44 diseases, 183 symptoms
+2025-10-10 20:21:35 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 20:21:35 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 20:21:35 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 20:21:35 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 20:21:52 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 20:27:11 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 20:27:11 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 20:27:11 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 20:27:11 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 20:27:11 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (57 records)
+2025-10-10 20:27:11 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 20:27:11 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 57 total records
+2025-10-10 20:27:11 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 57 diseases with 0 unique symptoms
+2025-10-10 20:27:11 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 57 diseases, 0 symptoms
+2025-10-10 20:27:11 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 20:27:11 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 20:27:11 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 20:27:12 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 20:27:33 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 20:28:53 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 20:28:53 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 20:28:53 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 20:28:53 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 20:28:53 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (15 records)
+2025-10-10 20:28:53 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 20:28:53 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 15 total records
+2025-10-10 20:28:53 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 15 diseases with 44 unique symptoms
+2025-10-10 20:28:53 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 15 diseases, 44 symptoms
+2025-10-10 20:28:54 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 20:28:54 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 20:28:54 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 20:28:55 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 20:29:12 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 20:31:01 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 20:31:01 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 20:31:01 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 20:31:01 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 20:31:01 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (15 records)
+2025-10-10 20:31:01 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 20:31:01 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 15 total records
+2025-10-10 20:31:01 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 15 diseases with 44 unique symptoms
+2025-10-10 20:31:01 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 15 diseases, 44 symptoms
+2025-10-10 20:31:02 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 20:31:02 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 20:31:02 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 20:31:02 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 20:31:12 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 20:33:16 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 20:33:16 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 20:33:16 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 20:33:16 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 20:33:16 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (15 records)
+2025-10-10 20:33:16 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 20:33:16 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 15 total records
+2025-10-10 20:33:16 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 15 diseases with 44 unique symptoms
+2025-10-10 20:33:16 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 15 diseases, 44 symptoms
+2025-10-10 20:33:17 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 20:33:17 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 20:33:17 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 20:33:17 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 20:33:29 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 20:35:58 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 20:35:58 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 20:35:58 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 20:35:58 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 20:35:58 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (5 records)
+2025-10-10 20:35:58 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 20:35:58 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 5 total records
+2025-10-10 20:35:58 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 5 diseases with 18 unique symptoms
+2025-10-10 20:35:58 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 5 diseases, 18 symptoms
+2025-10-10 20:35:58 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 20:35:58 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 20:35:58 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 20:35:59 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 20:36:16 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 20:41:24 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 20:41:24 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 20:41:24 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 20:41:24 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 20:41:24 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (5000 records)
+2025-10-10 20:41:24 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 20:41:24 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 5000 total records
+2025-10-10 20:41:24 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 0 diseases with 0 unique symptoms
+2025-10-10 20:41:24 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 0 diseases, 0 symptoms
+2025-10-10 20:41:25 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 20:41:25 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 20:41:25 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 20:41:26 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 20:42:09 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 21:00:17 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 21:00:17 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 21:00:17 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 21:00:17 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 21:00:17 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (5000 records)
+2025-10-10 21:00:17 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 21:00:17 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 5000 total records
+2025-10-10 21:00:17 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 0 diseases with 0 unique symptoms
+2025-10-10 21:00:17 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 0 diseases, 0 symptoms
+2025-10-10 21:00:18 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 21:00:18 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 21:00:18 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 21:00:19 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 21:01:10 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 21:05:43 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 21:05:43 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 21:05:43 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 21:05:43 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 21:05:43 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (5 records)
+2025-10-10 21:05:43 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 21:05:43 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 5 total records
+2025-10-10 21:05:43 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 5 diseases with 18 unique symptoms
+2025-10-10 21:05:43 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 5 diseases, 18 symptoms
+2025-10-10 21:05:44 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 21:05:44 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 21:05:44 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 21:05:44 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 21:05:57 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 21:09:30 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 21:09:30 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 21:09:30 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 21:09:30 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 21:09:30 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (1 records)
+2025-10-10 21:09:30 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 21:09:30 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 1 total records
+2025-10-10 21:09:30 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 1 diseases with 2 unique symptoms
+2025-10-10 21:09:30 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 1 diseases, 2 symptoms
+2025-10-10 21:09:31 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 21:09:31 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 21:09:31 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 21:09:32 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 21:09:54 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 21:10:30 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 21:10:30 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 21:10:30 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 21:10:30 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 21:10:30 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (1 records)
+2025-10-10 21:10:30 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 21:10:30 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 1 total records
+2025-10-10 21:10:30 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 1 diseases with 2 unique symptoms
+2025-10-10 21:10:30 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 1 diseases, 2 symptoms
+2025-10-10 21:10:31 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 21:10:31 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 21:10:31 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 21:10:32 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 21:10:46 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 21:14:28 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 21:14:28 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 21:14:28 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 21:14:28 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 21:14:28 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (6 records)
+2025-10-10 21:14:28 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 21:14:28 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 6 total records
+2025-10-10 21:14:28 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 6 diseases with 15 unique symptoms
+2025-10-10 21:14:28 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 6 diseases, 15 symptoms
+2025-10-10 21:14:28 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 21:14:28 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 21:14:28 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 21:14:29 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 21:14:39 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 21:15:45 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 21:15:45 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 21:15:45 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 21:15:45 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 21:15:45 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (3 records)
+2025-10-10 21:15:45 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 21:15:45 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 3 total records
+2025-10-10 21:15:45 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 3 diseases with 9 unique symptoms
+2025-10-10 21:15:45 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 3 diseases, 9 symptoms
+2025-10-10 21:15:46 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 21:15:46 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 21:15:46 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 21:15:47 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 21:15:57 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 21:15:57 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:44 | Dataset indexed in FAISS vector store
+2025-10-10 21:15:57 | INFO     | ai_engine.diagnostic_engine:__init__:49 | Hybrid Diagnostic Engine initialized with HyperRAG
+2025-10-10 21:15:57 | INFO     | services.cache_services:_initialize:45 | Cache service initialized (Redis)
+2025-10-10 21:15:57 | INFO     | services.metric_services:__init__:59 | Metrics service enabled
+2025-10-10 21:15:57 | INFO     | app:lifespan:99 | Knowledge Base: 3 diseases, 9 symptoms
+2025-10-10 21:15:57 | INFO     | app:lifespan:100 | Critical Diseases: 1
+2025-10-10 21:15:57 | INFO     | app:lifespan:101 | Device: cpu
+2025-10-10 21:15:57 | INFO     | app:lifespan:103 | ================================================================================
+2025-10-10 21:15:57 | INFO     | app:lifespan:104 | AI MediScan Pro - Ready for Diagnoses
+2025-10-10 21:15:57 | INFO     | app:lifespan:105 | ================================================================================
+2025-10-10 21:56:41 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 21:56:41 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 21:56:41 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 21:56:41 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 21:56:41 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (3 records)
+2025-10-10 21:56:41 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 21:56:41 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 3 total records
+2025-10-10 21:56:41 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 3 diseases with 9 unique symptoms
+2025-10-10 21:56:41 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 3 diseases, 9 symptoms
+2025-10-10 21:56:42 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 21:56:42 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 21:56:42 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 21:56:43 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 21:59:01 | INFO     | utils.logging_config:setup_logging:60 | Logging configured successfully
+2025-10-10 21:59:01 | INFO     | utils.logging_config:setup_logging:61 | Environment: development
+2025-10-10 21:59:01 | INFO     | utils.logging_config:setup_logging:62 | Log level: INFO
+2025-10-10 21:59:01 | INFO     | app:lifespan:72 | Initializing AI components...
+2025-10-10 21:59:01 | INFO     | ai_engine.knowledge_graph:load_datasets:93 | Loaded dataset: data\datasets\diseases.csv (3 records)
+2025-10-10 21:59:01 | WARNING  | ai_engine.knowledge_graph:load_datasets:77 | Dataset not found: data\datasets\diseases.json
+2025-10-10 21:59:01 | INFO     | ai_engine.knowledge_graph:load_datasets:106 | Merged 1 datasets: 3 total records
+2025-10-10 21:59:01 | INFO     | ai_engine.knowledge_graph:_process_medical_data:169 | Processed 3 diseases with 9 unique symptoms
+2025-10-10 21:59:01 | INFO     | ai_engine.knowledge_graph:__init__:62 | Knowledge Graph initialized: 3 diseases, 9 symptoms
+2025-10-10 21:59:02 | INFO     | ai_engine.image_classifier:_initialize_models:73 | Loaded 3 medical imaging models
+2025-10-10 21:59:02 | INFO     | ai_engine.image_classifier:__init__:46 | Image Classifier initialized on cpu
+2025-10-10 21:59:02 | INFO     | ai_engine.nlp_processor:__init__:35 | Clinical NLP Processor initialized
+2025-10-10 21:59:03 | INFO     | ai_engine.llm_interface:__init__:43 | Grok LLM Interface initialized (model: grok-2-1212)
+2025-10-10 21:59:13 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:21 | Loading dataset from data\datasets\diseases.csv
+2025-10-10 21:59:13 | INFO     | ai_engine.rag_engine:_load_and_index_dataset:44 | Dataset indexed in FAISS vector store
+2025-10-10 21:59:13 | INFO     | ai_engine.diagnostic_engine:__init__:49 | Hybrid Diagnostic Engine initialized with HyperRAG
+2025-10-10 21:59:13 | INFO     | services.cache_services:_initialize:45 | Cache service initialized (Redis)
+2025-10-10 21:59:13 | INFO     | services.metric_services:__init__:59 | Metrics service enabled
+2025-10-10 21:59:13 | INFO     | app:lifespan:99 | Knowledge Base: 3 diseases, 9 symptoms
+2025-10-10 21:59:13 | INFO     | app:lifespan:100 | Critical Diseases: 1
+2025-10-10 21:59:13 | INFO     | app:lifespan:101 | Device: cpu
+2025-10-10 21:59:13 | INFO     | app:lifespan:103 | ================================================================================
+2025-10-10 21:59:13 | INFO     | app:lifespan:104 | AI MediScan Pro - Ready for Diagnoses
+2025-10-10 21:59:13 | INFO     | app:lifespan:105 | ================================================================================

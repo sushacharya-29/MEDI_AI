@@ -1,0 +1,91 @@
+Disease,Stage,Severity,Age_Group,Organ_System,Symptom,Notes
+Common Cold,Early,Mild,All,Respiratory,Nasal congestion,Self-limiting viral infection
+Common Cold,Early,Mild,All,Respiratory,Sore throat,Usually resolves in 7-10 days
+Common Cold,Early,Mild,All,Respiratory,Cough,Non-productive;mild irritation
+Influenza,Early,Mild-Moderate,All,Respiratory,Fever,Sudden onset; may reach 102°F
+Influenza,Early,Mild-Moderate,All,Respiratory,Cough,Dry or productive
+Influenza,Early,Mild-Moderate,All,Respiratory, Myalgia,Muscle aches; body pains
+Influenza,Early,Mild-Moderate,All,Respiratory,Fatigue,Can last 2 weeks
+Influenza,Progressive,Severe,All,Respiratory,Shortness of breath,May indicate pneumonia
+Influenza,Progressive,Severe,All,Respiratory,Chest pain,Due to severe cough or secondary infection
+Pneumonia,Early,Moderate,Adult,Respiratory,Fever,High-grade;often >101°F
+Pneumonia,Early,Moderate,Adult,Respiratory,Cough,Productive with yellow/green sputum
+Pneumonia,Early,Moderate,Adult,Respiratory,Chills,Rigors may occur
+Pneumonia,Progressive,Severe,Adult,Respiratory,Shortness of breath,Severe dyspnea
+Pneumonia,Progressive,Severe,Adult,Respiratory,Chest pain,Pleuritic
+Tuberculosis,Early,Mild,Adult,Respiratory,Chronic cough,>3 weeks
+Tuberculosis,Early,Mild,Adult,Respiratory,Fatigue,Gradual onset
+Tuberculosis,Progressive,Severe,Adult,Respiratory,Weight loss,Cachexia in advanced cases
+Tuberculosis,Progressive,Severe,Adult,Respiratory,Night sweats,Profuse
+Asthma,Early,Mild,All,Respiratory,Wheezing,Triggered by allergens
+Asthma,Early,Mild,All,Respiratory,Shortness of breath,Mild intermittent
+Asthma,Progressive,Severe,All,Respiratory,Chest tightness,Continuous in exacerbation
+Asthma,Progressive,Severe,All,Respiratory,Cough (esp. at night),Worse during sleep
+COPD,Early,Moderate,Adult,Respiratory,Chronic cough,With sputum production
+COPD,Progressive,Severe,Adult,Respiratory,Shortness of breath,Exertional progressing to rest
+COPD,Progressive,Severe,Adult,Respiratory,Wheezing,Variable; often with exacerbations
+COPD,Progressive,Severe,Adult,Respiratory,Fatigue,Due to hypoxia
+Lung Cancer,Stage 1,Moderate,Adult,Respiratory,Persistent cough,Non-resolving
+Lung Cancer,Stage 1,Moderate,Adult,Respiratory,Localized chest pain,Dull; constant
+Lung Cancer,Stage 2,Severe,Adult,Respiratory,Coughing up blood,Hemoptysis
+Lung Cancer,Stage 2,Severe,Adult,Respiratory,Worsened breathlessness,Progressive dyspnea
+Lung Cancer,Stage 3,Severe,Adult,Respiratory,Severe persistent cough,Productive or dry
+Lung Cancer,Stage 3,Severe,Adult,Respiratory,Chest pain,Severe; progressive
+Lung Cancer,Stage 4,Critical,Adult,Respiratory,Respiratory failure,Requires oxygen/ventilation
+Lung Cancer,Stage 4,Critical,Adult,Systemic,Metastatic pain,Bone/headache due to metastasis
+Breast Cancer,Stage 1,Mild-Moderate,Adult,Reproductive,Painless lump,Non-tender; palpable
+Breast Cancer,Stage 1,Mild-Moderate,Adult,Reproductive,Localized swelling,Minimal edema
+Breast Cancer,Stage 2,Moderate,Adult,Reproductive,Nipple retraction,Visible skin changes
+Breast Cancer,Stage 2,Moderate,Adult,Reproductive,Skin dimpling,Peau d’orange appearance
+Breast Cancer,Stage 3,Severe,Adult,Reproductive,Nipple discharge,Bloody or serous
+Breast Cancer,Stage 3,Severe,Adult,Reproductive,Skin ulceration,Advanced local spread
+Breast Cancer,Stage 4,Critical,Adult,Systemic,Metastatic pain,Bone/liver
+Breast Cancer,Stage 4,Critical,Adult,Systemic,Breathing difficulty,Lung metastasis
+Diabetes Mellitus (Type 2),Early,Mild,Adult,Endocrine,Polyuria,Frequent urination
+Diabetes Mellitus (Type 2),Early,Mild,Adult,Endocrine,Polydipsia,Excessive thirst
+Diabetes Mellitus (Type 2),Early,Mild,Adult,Endocrine,Polyphagia,Increased hunger
+Diabetes Mellitus (Type 2),Progressive,Moderate,Adult,Endocrine,Fatigue,Due to hyperglycemia
+Diabetes Mellitus (Type 2),Progressive,Moderate,Adult,Endocrine,Blurred vision,Hyperglycemia effect
+Diabetes Mellitus (Type 2),Progressive,Moderate,Adult,Endocrine,Slow wound healing,High glucose impairs repair
+Diabetes Mellitus (Type 2),Progressive,Severe,Adult,Endocrine,Tingling in extremities,Peripheral neuropathy
+Hypertension,Early,Mild,Adult,Cardiovascular,Often asymptomatic,Silent disease
+Hypertension,Progressive,Moderate,Adult,Cardiovascular,Headache,Common in severe cases
+Hypertension,Progressive,Moderate,Adult,Cardiovascular,Dizziness,May cause fainting
+Hypertension,Progressive,Severe,Adult,Cardiovascular,Nosebleeds,Rare in crisis
+Hypertension,Progressive,Severe,Adult,Cardiovascular,Vision changes,Retinopathy in chronic cases
+Heart Disease (Ischemic),Early,Mild,Adult,Cardiovascular,Chest pain (angina),Exertional; relieved by rest
+Heart Disease (Ischemic),Progressive,Severe,Adult,Cardiovascular,Shortness of breath,Due to reduced cardiac output
+Heart Disease (Ischemic),Progressive,Severe,Adult,Cardiovascular,Fatigue,Chronic myocardial ischemia
+Heart Disease (Ischemic),Progressive,Severe,Adult,Cardiovascular,Palpitations,Arrhythmias possible
+Heart Disease (Ischemic),Progressive,Severe,Adult,Cardiovascular,Sweating,Diaphoresis during angina
+Myocardial Infarction,Acute,Critical,Adult,Cardiovascular,Severe chest pain,Central; radiates to arm/jaw
+Myocardial Infarction,Acute,Critical,Adult,Cardiovascular,Radiating arm/jaw pain,Classic symptom
+Myocardial Infarction,Acute,Critical,Adult,Cardiovascular,Shortness of breath,Dyspnea due to heart failure
+Myocardial Infarction,Acute,Critical,Adult,Cardiovascular,Nausea,Autonomic response
+Myocardial Infarction,Acute,Critical,Adult,Cardiovascular,Cold sweat,Sweating; clammy skin
+Stroke (Ischemic/Hemorrhagic),Acute,Critical,Adult,Neurological,Sudden numbness,Face/arm/leg
+Stroke (Ischemic/Hemorrhagic),Acute,Critical,Adult,Neurological,Confusion,Acute cognitive impairment
+Stroke (Ischemic/Hemorrhagic),Acute,Critical,Adult,Neurological,Trouble speaking,Aphasia
+Stroke (Ischemic/Hemorrhagic),Acute,Critical,Adult,Neurological,Vision problems,Loss of vision field
+Stroke (Ischemic/Hemorrhagic),Acute,Critical,Adult,Neurological,Severe headache,Thunderclap in hemorrhagic stroke
+Pulmonary Embolism,Acute,Critical,Adult,Respiratory,Acute shortness of breath,Sudden onset
+Pulmonary Embolism,Acute,Critical,Adult,Cardiovascular,Pleuritic chest pain,Sharp;worsens with inspiration
+Pulmonary Embolism,Acute,Critical,Adult,Respiratory,Cough,May be dry or blood-streaked
+Pulmonary Embolism,Acute,Critical,Adult,Cardiovascular,Hemoptysis,Coughing blood
+Pulmonary Embolism,Acute,Critical,Adult,Cardiovascular,Tachycardia,Rapid heart rate
+Pneumothorax,Acute,Critical,Adult,Respiratory,Sudden unilateral chest pain,Collapsed lung
+Pneumothorax,Acute,Critical,Adult,Respiratory,Shortness of breath,Severe dyspnea
+Pneumothorax,Acute,Critical,Adult,Respiratory,Reduced breath sounds,On affected side
+Sepsis,Progressive,Critical,Adult,Systemic,Fever,High-grade;~persistent
+Sepsis,Progressive,Critical,Adult,Systemic,Rapid heart rate,Tachycardia
+Sepsis,Progressive,Critical,Adult,Systemic,Rapid breathing,Tachypnea
+Sepsis,Progressive,Critical,Adult,Systemic,Confusion,Altered sensorium
+Sepsis,Progressive,Critical,Adult,Systemic,Low urine output,Acute kidney injury risk
+Sepsis,Progressive,Critical,Adult,Systemic,Hypotension,Shock possible
+Meningitis,Acute,Critical,All,Neurological,Severe headache,Intense pain
+Meningitis,Acute,Critical,All,Neurological,Neck stiffness,Kernig/Brudzinski signs
+Meningitis,Acute,Critical,All,Neurological,Fever,High-grade
+Meningitis,Acute,Critical,All,Neurological,Photophobia,Light sensitivity
+Meningitis,Acute,Critical,All,Neurological,Confusion,Altered mental status
+Meningitis,Acute,Critical,All,Neurological,Vomiting,Due to increased intracranial pressure
+

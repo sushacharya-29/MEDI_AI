@@ -1,0 +1,16 @@
+Disease1,Disease2,ComorbidityScore
+Hypertension,Diabetes,0.65
+Hypertension,Heart Disease,0.7
+Diabetes,Obesity,0.55
+Asthma,Allergy,0.6
+COPD,Smoking,0.8
+Stroke,Hypertension,0.75
+COVID-19,Pneumonia,0.9
+Heart Disease,Obesity,0.5
+Diabetes,Heart Disease,0.6
+Hypertension,Stroke,0.68
+Asthma,COPD,0.4
+Cancer,Diabetes,0.3
+Kidney Disease,Hypertension,0.55
+Obesity,Diabetes,0.7
+Pneumonia,Flu,0.6

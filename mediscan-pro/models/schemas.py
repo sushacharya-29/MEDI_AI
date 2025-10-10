@@ -87,7 +87,7 @@ class SymptomHighlight(BaseModel):
     category: str
     severity: int = Field(..., ge=1, le=4)
     duration: Optional[int] = None
-    importance: str = Field(..., regex="^(low|medium|high)$")
+    importance: str = Field(..., pattern="^(low|medium|high)$")
 
 
 class ImageFindings(BaseModel):

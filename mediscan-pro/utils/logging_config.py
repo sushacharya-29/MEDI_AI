@@ -1,140 +1,62 @@
 
 # ============================================================================
-# FILE: core/security.py
-# Security utilities: hashing, encryption, authentication
+# FILE: utils/logging_config.py
+# Structured logging configuration
 # ============================================================================
 
-from passlib.context import CryptContext
-from jose import JWTError, jwt
-from datetime import datetime, timedelta
-from typing import Optional, Dict
-import hashlib
-import secrets
-import base64
+from loguru import logger
+import sys
+from pathlib import Path
 from core.config import settings
-from core.exceptions import AuthenticationError
 
 
-# Password hashing context
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
-def hash_password(password: str) -> str:
-    """Hash a password using bcrypt"""
-    return pwd_context.hash(password)
-
-
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a password against its hash"""
-    return pwd_context.verify(plain_password, hashed_password)
-
-
-def generate_api_key() -> str:
-    """Generate a secure API key"""
-    return f"msp_{secrets.token_urlsafe(32)}"
-
-
-def hash_api_key(api_key: str) -> str:
-    """Hash an API key for storage"""
-    return hashlib.sha256(api_key.encode()).hexdigest()
-
-
-def create_access_token(
-    data: Dict,
-    expires_delta: Optional[timedelta] = None
-) -> str:
+def setup_logging():
     """
-    Create a JWT access token
+    Configure structured logging for the application.
     
-    Args:
-        data: Payload to encode in token
-        expires_delta: Token expiration time
-    
-    Returns:
-        Encoded JWT token
+    Features:
+    - Console output with colors
+    - File rotation (10 MB per file)
+    - JSON formatting for production
+    - Different log levels per environment
     """
-    to_encode = data.copy()
     
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(hours=24)
+    # Remove default handler
+    logger.remove()
     
-    to_encode.update({"exp": expire})
-    
-    encoded_jwt = jwt.encode(
-        to_encode,
-        settings.jwt_secret,
-        algorithm="HS256"
+    # Console handler with colors
+    logger.add(
+        sys.stdout,
+        format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | "
+               "<level>{level: <8}</level> | "
+               "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> | "
+               "<level>{message}</level>",
+        level=settings.log_level,
+        colorize=True
     )
     
-    return encoded_jwt
-
-
-def verify_token(token: str) -> Dict:
-    """
-    Verify and decode a JWT token
+    # File handler with rotation
+    log_dir = Path("logs")
+    log_dir.mkdir(exist_ok=True)
     
-    Args:
-        token: JWT token to verify
+    logger.add(
+        log_dir / "mediscan_{time:YYYY-MM-DD}.log",
+        rotation="10 MB",
+        retention="30 days",
+        compression="zip",
+        format="{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function}:{line} | {message}",
+        level="INFO"
+    )
     
-    Returns:
-        Decoded token payload
+    # Error file (separate for easy debugging)
+    logger.add(
+        log_dir / "errors_{time:YYYY-MM-DD}.log",
+        rotation="10 MB",
+        retention="90 days",
+        level="ERROR",
+        format="{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function}:{line} | {message}\n{exception}"
+    )
     
-    Raises:
-        AuthenticationError: If token is invalid
-    """
-    try:
-        payload = jwt.decode(
-            token,
-            settings.jwt_secret,
-            algorithms=["HS256"]
-        )
-        return payload
-    except JWTError:
-        raise AuthenticationError("Invalid or expired token")
-
-
-def hash_patient_id(patient_id: str) -> str:
-    """
-    Hash patient ID for privacy (HIPAA compliance)
-    
-    Args:
-        patient_id: Original patient identifier
-    
-    Returns:
-        Hashed patient ID (first 16 chars of SHA-256)
-    """
-    return hashlib.sha256(patient_id.encode()).hexdigest()[:16]
-
-
-def encrypt_sensitive_data(data: str) -> str:
-    """
-    Encrypt sensitive medical data
-    
-    Note: In production, use proper encryption like Fernet
-    """
-    from cryptography.fernet import Fernet
-    
-    # Use encryption key from settings
-    key = settings.encryption_key.encode()[:32]  # Ensure 32 bytes
-    # Pad or hash to ensure proper length
-    key = hashlib.sha256(key).digest()
-    key = base64.urlsafe_b64encode(key)
-    
-    f = Fernet(key)
-    return f.encrypt(data.encode()).decode()
-
-
-def decrypt_sensitive_data(encrypted_data: str) -> str:
-    """Decrypt sensitive medical data"""
-    from cryptography.fernet import Fernet
-    import base64
-    
-    key = settings.encryption_key.encode()[:32]
-    key = hashlib.sha256(key).digest()
-    key = base64.urlsafe_b64encode(key)
-    
-    f = Fernet(key)
-    return f.decrypt(encrypted_data.encode()).decode()
-
+    logger.info("Logging configured successfully")
+    logger.info(f"Environment: {settings.environment}")
+    logger.info(f"Log level: {settings.log_level}")
