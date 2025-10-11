@@ -46,8 +46,8 @@ from services.metric_services import MetricsService
 # ============================================================================
 from fastapi import Header, HTTPException, Depends
 import os
+async def verify_api_key(x_api_key: str = Header(..., alias="x-api-key")):
 
-async def verify_api_key(x_api_key: str = Header(...)):
     """
     Validate incoming API Key.
     """
@@ -447,6 +447,17 @@ async def get_disease_information(
         logger.error(f"Disease info error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/test-grok")
+async def test_grok(request: Request):
+    llm = request.app.state.llm_interface
+    try:
+        result = await llm.get_medical_diagnosis(
+            rag_context="Patient has fever and cough",
+            additional_instructions="Explain simply"
+        )
+        return {"status": "success", "response": result}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
 
 @app.get(
     f"{settings.api_v2_prefix}/stats",

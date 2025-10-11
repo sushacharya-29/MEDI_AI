@@ -2,7 +2,7 @@ import pandas as pd
 import json
 from pathlib import Path
 import random
-
+random.seed(42)
 def create_groundbreaking_medical_dataset():
     """Create a medically meaningful, scalable dataset for AI MediScan Pro"""
     print("Creating groundbreaking medical dataset...")
@@ -438,10 +438,6 @@ def create_groundbreaking_medical_dataset():
             'CT: pancreatic inflammation'
         ]
     }
-import random
-import random
-
-import random
 
 def expand_diseases(base_data, target_size=200):
     expanded = {k: [] for k in base_data}

@@ -88,8 +88,8 @@ class Settings(BaseSettings):
     # ================================
     # Grok API Configuration
     # ================================
-    grok_api_url: str = "https://api.x.ai/v1/chat/completions"
-    grok_model: str = "grok-2-1212"
+    grok_api_url: str = "https://openrouter.ai/api/v1/chat/completions"
+    grok_model: str = "grok-4-fast"
     grok_temperature: float = 0.3
     grok_max_tokens: int = 2000
 

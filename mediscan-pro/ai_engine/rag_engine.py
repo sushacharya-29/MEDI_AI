@@ -1,6 +1,8 @@
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
+
 from langchain.docstore.document import Document
+
 import pandas as pd
 from pathlib import Path
 from typing import List, Dict, Any
