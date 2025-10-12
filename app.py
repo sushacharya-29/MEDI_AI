@@ -244,10 +244,8 @@ async def health_check(request: Request):
         }
     )
 
-
-@app.post (
+@app.post(
     f"{settings.api_v2_prefix}/diagnose",
-    response_model=DiagnosisOutput,
     tags=["Diagnosis"],
     dependencies=[Depends(verify_api_key)]
 )
@@ -257,70 +255,52 @@ async def diagnose_patient(
     image: UploadFile = File(None)
 ):
     """
-    Comprehensive multi-modal diagnosis endpoint.
-    
-    This is the MAIN endpoint judges will test.
-    
-    Features:
-    - Text-based symptom analysis with NLP
-    - Medical image analysis (X-ray, CT, skin)
-    - Knowledge graph retrieval (RAG)
-    - LLM reasoning with clinical context
-    - Ensemble predictions
-    - Clinical validation rules
-    - Caching for performance
+    Comprehensive multi-modal diagnosis endpoint with humanized reasoning output.
     """
     start_time = time.time()
     
     try:
-        # Check cache first (for performance demo)
+        # Check cache first
         cached = await request.app.state.cache_service.get_diagnosis(
             patient_data.symptoms or "",
             patient_data.dict()
         )
         
         if cached:
-            logger.info("Returning cached diagnosis")
-            cached['from_cache'] = True
-            return cached
-        
+            logger.info("Returning cached diagnosis (humanized text)")
+            return {"diagnosis": cached.get("diagnosis", "Cached diagnosis unavailable.")}
+
         # Process image if provided
         image_data = None
         if image:
             image_data = await image.read()
             logger.info(f"Received image: {image.filename} ({len(image_data)} bytes)")
-            
-            # Record image analysis metric
             request.app.state.metrics_service.record_image_analysis('uploaded')
         
-        # Run diagnosis pipeline
+        # Run diagnosis pipeline → return text
         diagnosis = await request.app.state.diagnostic_engine.diagnose(
             symptoms_text=patient_data.symptoms,
             patient_data=patient_data.dict(),
             image_data=image_data
         )
         
-        # Cache result
+        # Cache the text result
         if patient_data.symptoms:
             await request.app.state.cache_service.cache_diagnosis(
                 patient_data.symptoms,
                 patient_data.dict(),
-                diagnosis
+                {"diagnosis": diagnosis}
             )
         
         # Record metrics
         duration = time.time() - start_time
-        request.app.state.metrics_service.record_diagnosis(diagnosis, duration)
-        
-        logger.info(
-            f"Diagnosis complete: {diagnosis['primary_diagnosis']} "
-            f"(confidence: {diagnosis['confidence_score']}%, "
-            f"risk: {diagnosis['risk_level']}, "
-            f"time: {duration:.2f}s)"
+        request.app.state.metrics_service.record_diagnosis(
+            {"text_length": len(diagnosis)}, duration
         )
-        
-        diagnosis['from_cache'] = False
-        return diagnosis
+
+        logger.info(f"Diagnosis complete (humanized text, time: {duration:.2f}s)")
+
+        return {"diagnosis": diagnosis}
         
     except Exception as e:
         logger.error(f"Diagnosis error: {str(e)}", exc_info=True)
@@ -329,6 +309,7 @@ async def diagnose_patient(
             status_code=500,
             detail=f"Diagnosis failed: {str(e)}"
         )
+
 
 
 @app.post(
